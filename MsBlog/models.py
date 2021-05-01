@@ -65,7 +65,7 @@ class Post(models.Model):
         return f'{self.id}  {self.post_title}'
 
     def get_absolute_url(self):
-        return f'/{self.sub_category.slug}/{self.slug}/'
+        return f'/{self.sub_category.category.slug}/{self.sub_category.slug}/{self.slug}/'
 
     def get_image(self):
         if self.image:
@@ -101,7 +101,7 @@ class Comments(models.Model):
     user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name="postComment", on_delete=models.CASCADE)
     comment = models.TextField("Comment On Post", max_length=500)
-    date = models.DateTimeField("Comment Date", auto_now_add=True)
+    date = models.DateField("Comment Date", auto_now_add=True)
 
     class Meta:
         ordering = ['-date', ]
@@ -119,16 +119,13 @@ class ContactUs(models.Model):
     last_name = models.CharField("Last Name", max_length=30, blank=False, null=False)
     email = models.EmailField("Email", max_length=50, blank=False, null=False)
     phone = models.IntegerField("Contact No.", null=False, blank=False)
-    subject = models.CharField("Subject", max_length=40)
-    message = models.TextField("Message", max_length=300)
-    date = models.DateTimeField("Contact Date", auto_now_add=True)
+    subject = models.CharField("Subject", max_length=60)
+    message = models.TextField("Message", max_length=500)
+    date = models.DateField("Contact Date", auto_now_add=True)
 
     class Meta:
         ordering = ['-date', ]
         verbose_name = 'Contact Us'
 
     def __str__(self):
-        return self.date
-
-    def get_absolute_url(self):
-        return f'/{self.id}/'
+        return self.subject
